@@ -91,4 +91,4 @@ if __name__ == '__main__':
     import uvicorn
     
     app_str = 'server_minimal:app'
-    uvicorn.run(app_str, host='localhost', port=8000, reload=True, workers=1)
+    uvicorn.run(app_str, host='0.0.0.0', port=8000, reload=True, workers=1)

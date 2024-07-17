@@ -25,8 +25,8 @@ Again, you can try this out by:
 You can initialize the server with `python server.py` (use `--help` for other args) or `uvicorn server:app --reload`
 
 You can test the server a couple of ways:
-1. Using `client.py` - this is a basic example of using the Requests library to upload a batch of images + model name to `localhost:8000/detect/` and receive JSON inference results. 
-1. Open `localhost:8000` in your web browser, use the web form to upload image(s) and select a model, then click submit. You should see inference results displayed in the web browser shortly. 
+1. Using `client.py` - this is a basic example of using the Requests library to upload a batch of images + model name to `localhost:8000/detect/` and receive JSON inference results.
+1. Open `localhost:8000` in your web browser, use the web form to upload image(s) and select a model, then click submit. You should see inference results displayed in the web browser shortly.
 1. Open `http://localhost:8000/drag_and_drop_detect` in your web browser, use the drag and drop interface to upload an image, and the image + bounding boxes will be rendered via Javascript.
 
 Models will automatically be downloaded the first time they are used and are cached on disc.
@@ -45,13 +45,24 @@ Contains the FastAPI server code and helper functions.
 ### Jinja2 Templates (`/templates` folder)
 
 | File | Description |
-| --- | --- | 
+| --- | --- |
 | layout.html | Base template with navbar that is common to all pages. `home.html` and `drag_and_drop_detect.html` both extend this template. |
 | `home.html` | Basic web form for uploading images, model selection and inference size to the server. The server gets the YOLO results and renders a bbox image, then returns the results by plugging them into the jinja2 template `templates/show_results.html`. This is overly fancy, but I wanted to demonstrate how to do this - if you want just JSON results see the minimal client-server example. |
 | `drag_and_drop_detect.html` | This implements a Drag & Drop interface to upload images. Once dropped onto the dropzone, the image and parameters are sent to the server's `/detect` endpoint which returns JSON results. The JSON results are then used to render the image + bboxes in the web browser as seen in the Inference Methods section above. The box labels are raised above the box outline such that the labels don't overlap with each other. |
- 
+
 ## Credits
 
 This repository is a wrapper around YOLOv5 from Ultralytics: https://github.com/ultralytics/yolov5
 
 Also modified the results_to_json function from the original here: https://gist.github.com/decent-engineer-decent-datascientist/81e04ad86e102eb083416e28150aa2a1
+
+# Develop
+## Build docker image
+```bash
+docker build -t registry.cn-hangzhou.aliyuncs.com/fishing01/fastapi-yolov5 .
+docker push registry.cn-hangzhou.aliyuncs.com/fishing01/fastapi-yolov5
+```
+# Deploy in k8s
+```bash
+kubectl apply -f k8s-deploy
+```
